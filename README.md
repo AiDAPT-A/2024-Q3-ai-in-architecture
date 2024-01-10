@@ -1,4 +1,4 @@
-# 2024 Q3 AI in Architecture Design Elective (AR2AA010)
+# 2024 Q3 AI in Architectural Design Elective (AR2AA010)
 
 The aim of the course is to unlock and channel the creative potential of architects in the era of AI. 
 This will be done mainly by providing valuable resources, and methods for quantitatively curating and evaluating visual architectural data.
@@ -15,12 +15,15 @@ The course consists of the following elements:
 - *Group project*.
 
 Most information regarding the course can be found in this repository: see the [organization section](#organization). 
+The high-level overview of the Python packages is provided and clarified in the [Python packages section](#python-packaging)
 Tips and tricks about the usage and installation of Python and the script and notebooks can be found the [usage and installation section](#usage-and-installation).
-Useful links to other repositories, archives, relevant projects, toolboxes, can be found under [external links](#external-links).
+Useful links to other repositories, archives, relevant projects, toolboxes, etc. can be found under [external links](#external-links).
 
 ## Organization
 
 The repository has the following structure:
+
+## Python packages
 
 ## Usage and installation
 
