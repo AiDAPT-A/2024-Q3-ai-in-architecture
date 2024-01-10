@@ -25,6 +25,26 @@ The repository has the following structure:
 
 ## Python packages
 
+The Python tutorials are designed according to the following principles:
+
+- *No-experience*. Students with no or limited background in coding can easily follow it,
+- *Application-driven*. The tutorials are designed around an architectural application / need / question - and *not* around a topic in programming,
+- *Sequential*. The tutorials are ordered from simple to more complex, and build on each other. Later tutorials often require the programming skills learned in earlier ones.
+
+The tutorials are *application-driven* because the tutorials are meant for students in architectural design. 
+Therefore, to maximally engage this audience group, a tutorial starts with an architectural application (or need, or question). 
+The necessary programming concepts (and associated Pyhon libraries) that are needed to help 'solve' the application are woven into the tutorials, and are explained and used only when needed. 
+Hence, instead of simply teaching a collection of programming concepts, the tutorials directly associate programming concepts to particular architectural applications. 
+
+The tutorials are organized as follows:
+
+- Python basics
+- Floor plans: visualization, representation, and analysis
+- Extracting architectural data from IFC files
+- Architectural data sets and data-driven analysis
+- Machine learning on architectural data
+- AI-driven comparative analysis of buildings
+
 ## Usage and installation
 
 ## External links
