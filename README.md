@@ -15,8 +15,8 @@ The course consists of the following elements:
 - *Group project*.
 
 Most information regarding the course can be found in this repository: see the [organization section](#organization). 
-The high-level overview of the Python packages is provided and clarified in the [Python packages section](#python-packaging)
-Tips and tricks about the usage and installation of Python and the script and notebooks can be found the [usage and installation section](#usage-and-installation).
+The high-level overview of the Python packages is provided and clarified in the [Python packages section](#python-packaging).
+Tips and tricks about the usage and installation of Python libraries, scripts and notebooks can be found the [usage and installation section](#usage-and-installation).
 Useful links to other repositories, archives, relevant projects, toolboxes, etc. can be found under [external links](#external-links).
 
 ## Organization
