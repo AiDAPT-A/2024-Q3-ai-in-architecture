@@ -38,12 +38,12 @@ Hence, instead of simply teaching a collection of programming concepts, the tuto
 
 The tutorials are organized as follows:
 
-- Drawing with code: Python basics
-- Floor plans: visualization, representation, and analysis
-- Extracting architectural data from IFC files
-- Architectural data sets and data-driven analysis
-- Machine learning on architectural data
-- AI-driven comparative analysis of buildings
+- Drawing with code
+- Representing the building
+- Representing the outside
+- Architectural machine learning
+- 3D to 2D
+- Comparing buildings
 
 ## Usage and installation
 
