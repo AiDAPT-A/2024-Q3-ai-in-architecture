@@ -39,7 +39,7 @@ Hence, instead of simply teaching a collection of programming concepts, the tuto
 
 The tutorials are organized as follows:
 
-- 1 - [Drawing with code](./1_drawing_with_code.ipynb)
+- 1 - [Drawing with code](./1_code_canvas.ipynb)
 - 2 - Representing the building
 - 3 - Representing the outside
 - 4 - Architectural machine learning
