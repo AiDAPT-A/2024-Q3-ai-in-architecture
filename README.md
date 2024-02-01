@@ -41,7 +41,7 @@ The tutorials are organized as follows:
 
 - 1 - [Drawing with code](./1_code_canvas.ipynb)
 - 2 - Representing the building
-- 3 - Representing the outside
+- 3 - [Representing the outside](./3_beyond_boundaries.ipynb)
 - 4 - Architectural machine learning
 - 5 - 3D to 2D
 - 6 - Comparing buildings
