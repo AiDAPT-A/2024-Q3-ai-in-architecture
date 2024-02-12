@@ -24,7 +24,7 @@ The course consists of the following elements:
 | February 23 | Computer vision <br> Tutorial 2: Extracting floor plans |
 | March 1 | Papers seminar [List of papers](/seminars/papers.md) <br> Tutorial 3: Floor plan representation |
 | Marh 8 | Cyclomedia workshop <br>Introduction to the projects <br> Tutorial 4: Street view imagery |
-| March 15 | Similarity learning <br> Tutorial 5: [Beyond boundaries](/tutorials/4_beyond_boundaries.ipynb)  |
+| March 15 | Similarity learning <br> Tutorial 5: [Beyond boundaries](/tutorials/5_beyond_boundaries.ipynb)  |
 | March 22 | Reinforcement learning <br> Tutorial 6: []()  |
 | April 8 | Interpretable AI <br> Tutorial 7: T-SNE  |
 | April 19 |  |
