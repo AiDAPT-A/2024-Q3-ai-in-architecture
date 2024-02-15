@@ -6,15 +6,15 @@ The full name of the course is *AI in Architectural Design: Quantitative Analysi
 This course is given at the faculty of Architecture and the Built-Environment (Delft University of Technology) as a 5EC course in the third quarter of the first year of the Architecture Master's track: Master 2, Q3.
 See: [study guide](https://www.studiegids.tudelft.nl/a101_displayCourse.do?course_id=63933) (not up-to-date yet), [flyer](/assets/flyer.jpeg).
 
-- Instructor: [Seyran Khademi](s.khademi@tudelft.nl).
-- Assistants: [Casper van Engelenburg](c.c.j.vanengelenburg@tudelft.nl), [Fatemeh Mostafavi](f.mostafavi@tudelft.nl), [Pablo G. Morato](p.g.moratodominguez@tudelft.nl).
+- Instructor: [Seyran Khademi](mailto:s.khademi@tudelft.nl).
+- Assistants: [Casper van Engelenburg](mailto:c.c.j.vanengelenburg@tudelft.nl), [Fatemeh Mostafavi](mailto:f.mostafavi@tudelft.nl), [Pablo G. Morato](mailto:p.g.moratodominguez@tudelft.nl).
 
 ## Agenda 
 
 | Date | Topic |
 | --- | --- |
 | February 16 | Introduction <br> Tutorial 1: [Code canvas](/tutorials/1_code_canvas.ipynb) |
-| February 23 | Computer vision <br> Tutorial 2: 3D to 2D |
+| February 23 | Computer vision <br> Tutorial 2: [3D to 2D](/tutorials/2_3D_to_2D.ipynb) |
 | March 1 | Floor plans [List of papers](/seminars/papers.md) <br> Tutorial 3: Building blueprint |
 | Marh 8 | The project <br>Introduction to the projects <br> Tutorial 4: Street view imagery |
 | March 15 | Context & outside <br> Tutorial 5: [Beyond boundaries](/tutorials/5_beyond_boundaries.ipynb)  |
