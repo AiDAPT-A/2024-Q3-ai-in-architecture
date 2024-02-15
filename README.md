@@ -14,12 +14,11 @@ This course is given at the faculty of Architecture and the Built-Environment (D
 | Date | Topic |
 | --- | --- |
 | February 16 | Introduction <br> Tutorial 1: [Code canvas](/tutorials/1_code_canvas.ipynb) |
-| February 23 | Computer vision <br> Tutorial 2: [3D to 2D](/tutorials/2_3D_to_2D.ipynb) |
+| February 23 | Computer vision <br> Tutorial 2: 3D to 2D |
 | March 1 | Floor plans [List of papers](/seminars/papers.md) <br> Tutorial 3: Building blueprint |
 | Marh 8 | The project <br>Introduction to the projects <br> Tutorial 4: Street view imagery |
-| March 15 | Context & outside <br> Tutorial 5: [Beyond boundaries](/tutorials/5_beyond_boundaries.ipynb)  |
+| March 15 | Context & outside <br> Tutorial 5: Beyond boundaries  |
 | March 22 | Building ML <br> Reinforcement learning <br> Tutorial 6: Learning from buildings |
 | April 8 |  Architectural harmony <br>Interpretable AI <br> Tutorial 8: Architectural harmony  |
 | April 19 |  |
 
-## Project
