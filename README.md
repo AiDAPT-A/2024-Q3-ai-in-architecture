@@ -1,10 +1,10 @@
-# AI in Architectural Design - AR2AA010
+# AI in Architectural Design
 
 The aim of the course is to unlock and channel the creative potential of architects in the era of AI. 
 This will be done mainly by providing valuable resources, and methods for quantitatively curating and evaluating visual architectural data.
 The full name of the course is *AI in Architectural Design: Quantitative Analysis of Architectural Imagery*.
 This course is given at the faculty of Architecture and the Built-Environment (Delft University of Technology) as a 5EC course in the third quarter of the first year of the Architecture Master's track: Master 2, Q3.
-See: [study guide](https://www.studiegids.tudelft.nl/a101_displayCourse.do?course_id=63933) (not up-to-date yet), [flyer](/assets/flyer.jpeg).
+[Flyer](/assets/flyer.jpeg).
 
 - Instructor: [Seyran Khademi](mailto:s.khademi@tudelft.nl).
 - Assistants: [Casper van Engelenburg](mailto:c.c.j.vanengelenburg@tudelft.nl), [Fatemeh Mostafavi](mailto:f.mostafavi@tudelft.nl), [Pablo G. Morato](mailto:p.g.moratodominguez@tudelft.nl).
