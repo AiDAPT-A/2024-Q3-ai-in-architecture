@@ -17,7 +17,7 @@ The tutorials are organized as follows:
 | --- | --- |
 | [Code canvas](./1_code_canvas.ipynb) | Create an understand how python objects can effectively represent shapes <br>Develop functions that output shapes and can modify them <br>Learn to write a script that can automatically develop a floor layout|
 | [3D to 2D](./2_from_3D_to_2D.ipynb) | Mounting Google Drive in Google Colaboratory <br>Creating GeoPandas DataFrame <br>Cleaning Data <br>Plotting FloorPlans|
-| Building blueprint |  |
+| [Building blueprint](3_building_blueprint.ipynb) | Describe a floor layout as a composed shape, an image, and an access graph <br> Effectively represent a composed shape, an image, and an access graph in Python objects <br> Create rasterized images from the composed shape representation <br> Extract access graph from the composed shape representation |
 | Street view imagery |  |
 | Beyond boundaries | Extract automatically images and create a customized dataset <br> Select which *building+context* representation is more informative depending on the task at hand <br>Generate image embbedings from pre-trained foundation models |
 | ... |  |
