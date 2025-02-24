@@ -22,6 +22,7 @@ import os
 from itertools import combinations
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 # Dataframes
 import pandas as pd
@@ -35,6 +36,13 @@ from shapely.affinity import rotate, scale
 
 # Graphs
 import networkx as nx
+
+# ----
+# Constants
+# ----
+
+RANDOM_COLORS = list(mcolors.XKCD_COLORS.keys())
+
 
 # ----
 # Dataframes
@@ -145,6 +153,7 @@ def extract_access_graph(polygons_room,  # Polygons of the rooms
     G.add_edges_from(edges)
 
     return G
+
 
 def draw_graph(G, ax,
                node_color='black', edge_color='black', 
