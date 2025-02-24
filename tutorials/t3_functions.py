@@ -20,6 +20,7 @@ Contains the following functions:
 # General
 import os
 import random
+import pickle
 from itertools import combinations
 import numpy as np
 import matplotlib.pyplot as plt
@@ -182,3 +183,19 @@ def draw_graph(G, ax,
                            ax=ax, 
                            edgelist=edges, edge_color=edge_color, width=edge_width, 
                            style='--')
+
+
+# ----
+# Folders and saving
+# ----
+
+def save_pickle(object_to_save, file_path):
+    """
+    Save an object to a specified file path using pickle.
+
+    Parameters:
+    - object_to_save: The Python object to be saved.
+    - file_path: The path (including filename) where the object should be saved.
+    """
+    with open(file_path, "wb") as file:
+        pickle.dump(object_to_save, file)
