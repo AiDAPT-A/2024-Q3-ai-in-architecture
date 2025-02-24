@@ -14,7 +14,7 @@ Contains the following functions:
 """
 
 # ----
-Imports
+# Imports
 # ----
 
 # General
@@ -37,7 +37,7 @@ from shapely.affinity import rotate, scale
 import networkx as nx
 
 # ----
-Dataframes
+# Dataframes
 # ----
 
 def make_gdf_valid(gdf):
@@ -47,7 +47,7 @@ def make_gdf_valid(gdf):
   return gdf
 
 # ----
-Shapes
+# Shapes
 # ----
 
 def draw_shape(ax, poly, label=None, **kwargs):
@@ -88,7 +88,7 @@ def polygon_to_list(polygon: Polygon) -> list:
 
 
 # ----
-Graphs
+# Graphs
 # ----
 
 def extract_access_graph(polygons_room,  # Polygons of the rooms
