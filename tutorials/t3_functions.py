@@ -12,6 +12,11 @@ Contains the following functions:
 - Draw Graph on an axis
 
 """
+
+# ----
+Imports
+# ----
+
 # General
 import os
 from itertools import combinations
@@ -31,14 +36,20 @@ from shapely.affinity import rotate, scale
 # Graphs
 import networkx as nx
 
-# Dataframes
+# ----
+Dataframes
+# ----
+
 def make_gdf_valid(gdf):
   """Makes the geometries in the given GeoPandas dataframe valid by buffering them."""
   
   gdf['geometry'] = gdf['geometry'].apply(lambda poly: poly if poly.is_valid else poly.buffer(0))
   return gdf
 
-# Shapes
+# ----
+Shapes
+# ----
+
 def draw_shape(ax, poly, label=None, **kwargs):
     """Draws a Shapely Polygon or MultiPolygon with customizable fill and edge colors. """
   
@@ -52,6 +63,7 @@ def draw_shape(ax, poly, label=None, **kwargs):
         ax.fill(x, y, label=label, **kwargs)
     else:
         raise TypeError("Input must be a Polygon or MultiPolygon")
+
 
 def rotate_polygon(rect: Polygon, scale_factor=0.5, angle=90):
     """Rotates and scales a polygonal shape. 
@@ -69,11 +81,16 @@ def rotate_polygon(rect: Polygon, scale_factor=0.5, angle=90):
 
     return rotated_rect
 
+
 def polygon_to_list(polygon: Polygon) -> list:
     """Converts a polygon into a list of coordinates."""
     return list(zip(*polygon.exterior.coords.xy))
 
-# Graphs
+
+# ----
+Graphs
+# ----
+
 def extract_access_graph(polygons_room,  # Polygons of the rooms
                                           polygons_door,   # Polygons of the doors
                                           names_room,  # Names of the rooms
