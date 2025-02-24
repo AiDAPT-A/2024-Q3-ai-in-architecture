@@ -19,6 +19,7 @@ Contains the following functions:
 
 # General
 import os
+import random
 from itertools import combinations
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,11 +39,12 @@ from shapely.affinity import rotate, scale
 import networkx as nx
 
 # ----
-# Constants
+# Random color generator
 # ----
 
-RANDOM_COLORS = list(mcolors.XKCD_COLORS.keys())
-
+def generate_color():
+  return random.choice(list(mcolors.XKCD_COLORS.keys()))
+  
 
 # ----
 # Dataframes
