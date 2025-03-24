@@ -1,8 +1,32 @@
+"""
+A library of functions used in the seventh tutorial of the course:
+
+T7 From Graphs to Similarity (ed. 24 - 25)
+
+Contains two parts:
+
+1. Functions in general
+- TODO: Add list
+
+2. Functions pertaining to the graph-based neural network
+- TODO: Add list (necessary?)
+"""
+
+# ----------------------------------------------------------------------
+# --- Utilities: Drawing, UMAP, Embeddings, Loading and saving, etc. ---
+# ----------------------------------------------------------------------
+
+
+
+
+# -----------------------------------------------------------------------
+# --- Graph embedding network (GEN) and graph matching networks (GMN) ---
+# -----------------------------------------------------------------------
+
 import torch
 from torch import nn
 from torch_geometric.nn import MessagePassing, BatchNorm
 from torch_scatter import scatter_mean
-
 
 def mlp(feat_dim):
     "Outputs a multi-layer perceptron of various depth and size, with ReLU activation."
