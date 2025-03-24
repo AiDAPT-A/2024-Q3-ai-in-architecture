@@ -12,12 +12,263 @@ Contains two parts:
 - TODO: Add list (necessary?)
 """
 
+## Imports
+
+import pickle
+import random
+from tqdm import tqdm
+import copy
+
+import matplotlib.pyplot as plt
+
+import numpy as np
+
+import networkx as nx
+from shapely.geometry import Polygon
+
+import omegaconf
+
+import torch
+from torch_geometric.utils import from_networkx
+
+from umap import UMAP
+
+## Constants
+
+room_colors = [
+    '#e6550d',  # living room
+    '#1f77b4',  # bedroom
+    '#fd8d3c',  # kitchen
+    '#6b6ecf',  # bathroom
+    '#fdae6b',  # dining
+    '#5254a3',  # store room
+    '#2ca02c',  # balcony
+    '#fdd0a2'   # corridor
+]
+
+
+## Functions
+
 # ----------------------------------------------------------------------
 # --- Utilities: Drawing, UMAP, Embeddings, Loading and saving, etc. ---
 # ----------------------------------------------------------------------
 
+def load_pickle(filename):
+    """
+    Loads a pickled file.
+    """
+    with open(filename, 'rb') as f:
+        object = pickle.load(f)
+        f.close()
+    return object
 
 
+def draw_polygon(ax, poly, label=None, **kwargs):
+    """Plots a polygon by filling it up. Edges of shapes are avoided to show exactly the area that
+    the elements occupy."""
+    x, y = poly.exterior.xy
+    ax.fill(x, y, label=label, **kwargs)
+    return
+
+
+def draw_rooms(ax, polygons, colors, lw=None):
+    """Draws the rooms of the floor plan layout."""
+
+    # Simultaneously extract geometries and categories
+    # And directly plot them int the correct color
+    for poly, color in zip(polygons, colors):
+        draw_polygon(ax, poly, facecolor=color, edgecolor='white', linewidth=lw)
+
+
+def draw_graph(ax, G, fs, lw=0, s=20, w=2, 
+               node_color='black', edge_colors=['black', 'white'], 
+               viz_rooms=True,
+               polygons = None,
+               pos = None):
+
+    # Extract information
+    if polygons is None: 
+        polygons = [Polygon(d) for _, d in G.nodes('polygon')]
+    colors = [room_colors[d] for _, d in G.nodes('category')]
+    if pos is None: 
+        pos = {n: np.array(
+            [Polygon(d).representative_point().x,
+            Polygon(d).representative_point().y])
+            for n, d in G.nodes('polygon')}
+
+    # Draw room shapes
+    if viz_rooms:
+        draw_rooms(ax, polygons, colors, lw=lw)
+
+    # Draw nodes
+    if isinstance(s, list):
+        nx.draw_networkx_nodes(G, pos, node_size=s, node_color=node_color, ax=ax)
+    else:
+        nx.draw_networkx_nodes(G, pos, node_size=s, node_color=node_color, ax=ax)
+
+    # Draw door edges
+    edges = [(u, v) for u, v, d in G.edges(data="connectivity") if d == 1]
+    nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color=edge_colors[0],
+                           width=w, ax=ax)
+
+    # Draw door edges
+    edges = [(u, v) for u, v, d in G.edges(data="connectivity") if d == 0]
+    nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color=edge_colors[1],
+                           width=w, ax=ax)
+
+
+def remove_attributes_from_graph(graph, list_attr):
+    """
+    Removes attributes from graph.
+    :param graph: Input topological graph.
+    :param list_attr: Attributes to-be removed.
+    :return: Output topological graph with removed attributes.
+    """
+
+    for attr in list_attr:
+        for n in graph.nodes(): # delete irrelevant nodes
+            del graph.nodes[n][attr]
+    return graph
+
+
+def prepare_data(data, device='cpu'):
+    """Prepares the graph data from DataBatch of the PyG Dataloader"""
+
+    edge_index = data['edge_index'].to(device)
+    x_geom = data['geometry'].float().to(device)
+    x_cats = data['category'].long().to(device)
+    if cfg.edge_type == "door":
+        edge_feats = data['connectivity'].long().to(device)
+    else:
+        edge_feats = data['inter-geometry'].float().to(device)
+    batch = torch.zeros(x_geom.size()[0], dtype=torch.int64).to(device)
+
+    return edge_index, x_geom, x_cats, edge_feats, batch
+
+
+def get_embeddings(graphs, model, device='cpu'):
+
+    # set model to eval mode; no randomness
+    model.eval()
+
+    # initialize list of names and embeddings
+    names, embeddings = [], []
+
+    for graph in tqdm(graphs, total=len(graphs)):
+
+        # Copy graph and get ID
+        G = copy.deepcopy(graph)
+        id = G.graph["ID"]
+
+        # Convert to PyG graph
+        G = remove_attributes_from_graph(G, ["polygon"])
+        G = from_networkx(G)
+
+        # Prepare the data
+        edge_index, x_geom, x_cats, edge_feats, batch = prepare_data(G)
+
+        # Feedforward to get graph-level feature vectors
+        with torch.no_grad():
+            _, graph_feats = model(edge_index, x_cats, x_geom, edge_feats, batch)
+
+        # Append to list
+        embeddings.append(graph_feats)
+        names.append(id)
+
+    # Concatenate embeddings into a vector
+    embeddings = torch.cat(embeddings, dim=0)
+
+    return names, embeddings
+
+
+def normalize(mat):
+    mat_n = mat - np.min(mat, axis=0)
+    mat_n /= np.max(mat_n, axis=0)
+    return mat_n
+
+
+def get_umap_projections(rs, dim=2, norm=True):
+
+    # Get projections (unnormalized)
+    proj = UMAP(n_components=dim).fit_transform(rs)
+
+    # Normalize if wanted
+    if norm: proj = normalize(proj)
+
+    return proj
+
+
+def get_grid_embeddings(embeds_2d, names, w=60, h=60):
+
+    # Initialize the grid
+    x = np.linspace(1, w-1, w-1) / w
+    y = np.linspace(1, h-1, h-1) / h
+    xx, yy = np.meshgrid(x, y)
+    coords = np.array((xx.ravel(), yy.ravel())).T
+
+    # Find the nearest neighbor for every grid point:
+    # - The nearest neighboring embedding will take the value of the grid point
+    # - The nearest neighbor should be close enough to the poit (min_dist),
+    # which means that not every grid point will have a floor plan associated with it.
+    min_dist = 1 / (2*h)
+    embeds_grid = []
+    names_grid = []
+
+    for xy in tqdm(coords, total=coords.shape[0]):
+
+        cost = np.sqrt(np.sum(np.power(embeds_2d - xy, 2), axis=1))
+        min_pos = cost.argmin()
+        if cost[min_pos] < min_dist:
+            embeds_grid.append(xy)
+            names_grid.append(names[min_pos])
+        else:
+            continue
+
+    embeds_grid = np.array(embeds_grid)
+
+    return embeds_grid, names_grid
+
+
+def draw_dataset(graphs, ids, embeds_grid, names_grid, w, fs=50, stop=-1):
+
+    # Set sizing of the floor plans based on the grid and original sizes
+    size = (1/w) * (1.1 / 2)
+
+    # Initialize figure
+    fig, ax = plt.subplots(1, 1, figsize=(fs, fs))
+    ax.set_aspect('equal')
+
+    # Ax set limits
+    ax.set_xlim([-0.05, 1.05])
+    ax.set_ylim([-0.05, 1.05])
+
+    # Make up spines
+    ax.spines['bottom'].set_linewidth(fs/5)
+    ax.spines['left'].set_linewidth(fs/5)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+
+    # Make up ticks
+    ax.tick_params(axis='both', width=fs/5, labelsize=fs*2)
+
+    # Make up labels
+    _ = ax.set_ylabel("Hidden Feature 1", fontsize=fs*3)
+    _ = ax.set_xlabel("Hidden Feature 2", fontsize=fs*3)
+
+    for id, feat in tqdm(zip(names_grid[:stop], embeds_grid[:stop])):
+
+        # Find G by indexing the name
+        G = graphs[ids.index(id)]
+
+        # Translate polygons and centers based on the embeddings
+        polygons = [Polygon(np.array(d) * size - size / 2 + feat) for _, d in G.nodes('polygon')]
+        pos = {n: np.array(
+            [Polygon(d).representative_point().x,
+            Polygon(d).representative_point().y]) * size - size / 2 + feat
+            for n, d in G.nodes('polygon')}
+
+        # Draw floor plan and graph
+        draw_graph(ax, G, polygons=polygons, pos=pos, fs=fs, s=fs/6, w=fs/80, lw=fs/100)
 
 # -----------------------------------------------------------------------
 # --- Graph embedding network (GEN) and graph matching networks (GMN) ---
