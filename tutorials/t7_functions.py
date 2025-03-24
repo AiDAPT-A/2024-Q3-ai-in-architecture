@@ -137,10 +137,7 @@ def prepare_data(data, device='cpu'):
     edge_index = data['edge_index'].to(device)
     x_geom = data['geometry'].float().to(device)
     x_cats = data['category'].long().to(device)
-    if cfg.edge_type == "door":
-        edge_feats = data['connectivity'].long().to(device)
-    else:
-        edge_feats = data['inter-geometry'].float().to(device)
+    edge_feats = data['connectivity'].long().to(device)
     batch = torch.zeros(x_geom.size()[0], dtype=torch.int64).to(device)
 
     return edge_index, x_geom, x_cats, edge_feats, batch
