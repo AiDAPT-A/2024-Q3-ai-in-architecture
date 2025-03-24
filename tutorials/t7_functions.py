@@ -184,10 +184,10 @@ def normalize(mat):
     return mat_n
 
 
-def get_umap_projections(rs, dim=2, norm=True):
+def get_umap_projections(rs, dim=2, norm=True, random_state=None):
 
     # Get projections (unnormalized)
-    proj = UMAP(n_components=dim).fit_transform(rs)
+    proj = UMAP(n_components=dim, random_state=random_state).fit_transform(rs)
 
     # Normalize if wanted
     if norm: proj = normalize(proj)
