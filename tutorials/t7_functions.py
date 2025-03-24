@@ -226,7 +226,27 @@ def get_grid_embeddings(embeds_2d, names, w=60, h=60):
     return embeds_grid, names_grid
 
 
-def draw_dataset(graphs, ids, embeds_grid, names_grid, w, fs=50, stop=-1):
+def draw_square(ax, size, center, color="r", lw=0.5):
+
+    x, y = center
+    half_s = size / 2
+
+    # Define square corners (in clockwise or counter-clockwise order)
+    square = [
+        (x - half_s, y - half_s),
+        (x - half_s, y + half_s),
+        (x + half_s, y + half_s),
+        (x + half_s, y - half_s),
+        (x - half_s, y - half_s)  # close the square
+    ]
+
+    # Unzip into X and Y coordinates
+    xs, ys = zip(*square)
+
+    ax.plot(xs, ys, f'{color}-', linewidth=lw)
+
+
+def draw_dataset(graphs, names, embeds_grid, names_grid, w, fs=50, stop=-1):
 
     # Set sizing of the floor plans based on the grid and original sizes
     size = (1/w) * (1.1 / 2)
@@ -255,7 +275,7 @@ def draw_dataset(graphs, ids, embeds_grid, names_grid, w, fs=50, stop=-1):
     for id, feat in tqdm(zip(names_grid[:stop], embeds_grid[:stop])):
 
         # Find G by indexing the name
-        G = graphs[ids.index(id)]
+        G = graphs[names.index(id)]
 
         # Translate polygons and centers based on the embeddings
         polygons = [Polygon(np.array(d) * size - size / 2 + feat) for _, d in G.nodes('polygon')]
@@ -266,6 +286,11 @@ def draw_dataset(graphs, ids, embeds_grid, names_grid, w, fs=50, stop=-1):
 
         # Draw floor plan and graph
         draw_graph(ax, G, polygons=polygons, pos=pos, fs=fs, s=fs/6, w=fs/80, lw=fs/100)
+
+        if id in ids_rplan:
+            draw_square(ax, size*1.7, feat - size*0.5, color="b", lw=fs/30)
+        else:
+            draw_square(ax, size*1.7, feat - size*0.5, color="r", lw=fs/30)
 
 # -----------------------------------------------------------------------
 # --- Graph embedding network (GEN) and graph matching networks (GMN) ---
