@@ -223,6 +223,24 @@ def get_grid_embeddings(embeds_2d, names, w=60, h=60):
 
     embeds_grid = np.array(embeds_grid)
 
+    # Sort names and sort embeds with it
+    # Zip the two lists together
+    combined = list(zip(names_grid, embeds_grid))
+    
+    # Separate into int and str groups
+    ints = [(n, e) for n, e in combined if isinstance(n, int)]
+    strs = [(n, e) for n, e in combined if isinstance(n, str)]
+    
+    # Concatenate groups: ints first, then strs
+    reordered = ints + strs
+    
+    # Unzip back into separate lists
+    names_grid_ordered, embeds_grid_ordered = zip(*reordered)
+    
+    # Convert to lists
+    names_grid = list(names_grid_ordered)
+    embeds_grid = np.array(embeds_grid_ordered)
+
     return embeds_grid, names_grid
 
 
