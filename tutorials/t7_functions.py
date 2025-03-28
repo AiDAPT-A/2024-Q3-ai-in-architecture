@@ -24,7 +24,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import networkx as nx
-from shapely.geometry import Polygon
+from shapely.geometry import Polygon, MultiPolygon
+from shapely.geometry.base import BaseGeometry
 
 import omegaconf
 
@@ -63,38 +64,58 @@ def load_pickle(filename):
     return object
 
 
-def draw_polygon(ax, poly, label=None, **kwargs):
-    """Plots a polygon by filling it up. Edges of shapes are avoided to show exactly the area that
-    the elements occupy."""
-    x, y = poly.exterior.xy
-    ax.fill(x, y, label=label, **kwargs)
-    return
+def draw_geometry(ax, geometry: BaseGeometry, facecolor='lightblue', edgecolor='black', linewidth=0):
+    """
+    Plots a shapely Polygon or MultiPolygon.
 
+    Parameters:
+        geometry (Polygon or MultiPolygon): The geometry to plot.
+        ax (matplotlib.axes.Axes, optional): The axes to plot on.
+        color (str): Fill color.
+        edgecolor (str): Edge color.
+    """
 
-def draw_rooms(ax, polygons, colors, lw=None):
+    def draw_polygon(ax, poly, label=None, **kwargs):
+        """Plots a polygon by filling it up. Edges of shapes are avoided to show exactly the area that
+        the elements occupy."""
+        x, y = poly.exterior.xy
+        ax.fill(x, y, label=label, **kwargs)
+        return
+
+    if isinstance(geometry, Polygon):
+        draw_polygon(ax, geometry, facecolor=facecolor, edgecolor=edgecolor, linewidth=linewidth)
+    elif isinstance(geometry, MultiPolygon):
+        for poly in geometry.geoms:
+            draw_polygon(ax, poly, facecolor=facecolor, edgecolor=edgecolor, linewidth=linewidth)
+    else:
+        raise TypeError("Geometry must be a shapely Polygon or MultiPolygon")
+
+def draw_rooms(ax, polygons, colors, lw=None, edgecolor="white"):
     """Draws the rooms of the floor plan layout."""
 
     # Simultaneously extract geometries and categories
     # And directly plot them int the correct color
     for poly, color in zip(polygons, colors):
-        draw_polygon(ax, poly, facecolor=color, edgecolor='white', linewidth=lw)
+        draw_geometry(ax, poly, facecolor=color, edgecolor=edgecolor, linewidth=lw)
+
+def polygonize(poly):
+
+    try:
+        return Polygon(poly)
+    except:
+        return MultiPolygon([Polygon(d_sub) for d_sub in poly])
 
 
-def draw_graph(ax, G, fs, lw=0, s=20, w=2, 
-               node_color='black', edge_colors=['black', 'white'], 
-               viz_rooms=True,
-               polygons = None,
-               pos = None):
+def draw_graph(ax, G, fs, lw=0, s=20, w=2, node_color='black', edge_colors=['black', 'white'], viz_rooms=True, viz_doors=False, viz_adjacency=True):
 
     # Extract information
-    if polygons is None: 
-        polygons = [Polygon(d) for _, d in G.nodes('polygon')]
+    polygons = [polygonize(d) for _, d in G.nodes('polygon')]
+
     colors = [room_colors[d] for _, d in G.nodes('category')]
-    if pos is None: 
-        pos = {n: np.array(
-            [Polygon(d).representative_point().x,
-            Polygon(d).representative_point().y])
-            for n, d in G.nodes('polygon')}
+    pos = {n: np.array(
+        [polygonize(d).representative_point().x,
+         polygonize(d).representative_point().y])
+           for n, d in G.nodes('polygon')}
 
     # Draw room shapes
     if viz_rooms:
@@ -104,17 +125,22 @@ def draw_graph(ax, G, fs, lw=0, s=20, w=2,
     if isinstance(s, list):
         nx.draw_networkx_nodes(G, pos, node_size=s, node_color=node_color, ax=ax)
     else:
-        nx.draw_networkx_nodes(G, pos, node_size=s, node_color=node_color, ax=ax)
+        nx.draw_networkx_nodes(G, pos, node_size=fs*s, node_color=node_color, ax=ax)
 
     # Draw door edges
     edges = [(u, v) for u, v, d in G.edges(data="connectivity") if d == 1]
     nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color=edge_colors[0],
-                           width=w, ax=ax)
+                           width=1.5*w, ax=ax)
 
-    # Draw door edges
-    edges = [(u, v) for u, v, d in G.edges(data="connectivity") if d == 0]
-    nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color=edge_colors[1],
-                           width=w, ax=ax)
+    # Draw adjacent edges
+    if viz_adjacency:
+        edges = [(u, v) for u, v, d in G.edges(data="connectivity") if d == 0]
+        nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color=edge_colors[1],
+                               width=w, ax=ax)
+
+    if viz_doors:
+        doors = [door["geometry"] for _, door in G.graph["Doors"].iterrows()]
+        draw_rooms(ax, doors, colors=["red"]*len(doors), edgecolor='red', lw=2)
 
 
 def remove_attributes_from_graph(graph, list_attr):
