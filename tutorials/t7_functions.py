@@ -106,16 +106,21 @@ def polygonize(poly):
         return MultiPolygon([Polygon(d_sub) for d_sub in poly])
 
 
-def draw_graph(ax, G, fs, lw=0, s=20, w=2, node_color='black', edge_colors=['black', 'white'], viz_rooms=True, viz_doors=False, viz_adjacency=True):
+def draw_graph(ax, G, fs, polygons=None, pos=None, 
+               lw=0, s=20, w=2, node_color='black', edge_colors=['black', 'white'], 
+               viz_rooms=True, viz_doors=False, viz_adjacency=True):
 
     # Extract information
-    polygons = [polygonize(d) for _, d in G.nodes('polygon')]
+    if polygons is None:
+        polygons = [polygonize(d) for _, d in G.nodes('polygon')]
 
     colors = [room_colors[d] for _, d in G.nodes('category')]
-    pos = {n: np.array(
-        [polygonize(d).representative_point().x,
-         polygonize(d).representative_point().y])
-           for n, d in G.nodes('polygon')}
+
+    if pos is None:
+        pos = {n: np.array(
+            [polygonize(d).representative_point().x,
+             polygonize(d).representative_point().y])
+               for n, d in G.nodes('polygon')}
 
     # Draw room shapes
     if viz_rooms:
@@ -181,7 +186,10 @@ def get_embeddings(graphs, model, device='cpu'):
 
         # Copy graph and get ID
         G = copy.deepcopy(graph)
-        id = G.graph["ID"]
+        try:
+            id = G.graph["ID"]
+        except:
+            id = G.graph["name"]
 
         # Convert to PyG graph
         G = remove_attributes_from_graph(G, ["polygon"])
@@ -331,7 +339,7 @@ def draw_dataset(graphs, names, embeds_grid, names_grid, w, fs=50, stop=-1):
         # Draw floor plan and graph
         draw_graph(ax, G, polygons=polygons, pos=pos, fs=fs, s=fs/6, w=fs/80, lw=fs/100)
 
-        if id in ids_rplan:
+        if any(c.isalpha() for c in str(id)):
             draw_square(ax, size*1.7, feat - size*0.5, color="b", lw=fs/30)
         else:
             draw_square(ax, size*1.7, feat - size*0.5, color="r", lw=fs/30)
