@@ -298,7 +298,7 @@ def draw_square(ax, size, center, color="r", lw=0.5):
     ax.plot(xs, ys, f'{color}-', linewidth=lw)
 
 
-def draw_dataset(graphs, names, embeds_grid, names_grid, w, fs=50, stop=-1, s=0.5, w=0.5, lw=0.5):
+def draw_dataset(graphs, names, embeds_grid, names_grid, w, fs=50, stop=-1, s=0.5, lw=0.5):
 
     # Set sizing of the floor plans based on the grid and original sizes
     size = (1/w) * (1.1 / 2)
