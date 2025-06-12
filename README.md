@@ -22,4 +22,5 @@ This course is given at the faculty of Architecture and the Built-Environment (D
 | [T6_From_Images_to_3D_Understanding](tutorials/T6_From_Images_to_3D_Understanding.ipynb) | Understand opportunities of AI in computer vision and photogrammetry <br>Introduce the concept of data fusion when working with multiple modalities|
 | [T7_From_Graphs_to_Similarity](tutorials/T7_From_Graphs_to_Similarity.ipynb) | Investigate floor layout similarity using pre-trained deep neural networks specialized in extracting layout-specific features|
 | [T8_Similarity_Urban_Scale](tutorials/T8_Similarity_Urban_Scale.ipynb) | Visualize and interpret *urban* representations at scale <br>Create a customized dataset of aerial and street view images <br>Generate an urban similarity score by combining similarity scores computed from both aerial and street view images|
+| [W0_WELL_for_residential](tutorials/W0_WELL_for_residential.ipynb) | Create a visual narrative to verify some health and well-being concepts of WELL for residential standard|
 
